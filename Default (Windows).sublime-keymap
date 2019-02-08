@@ -1,0 +1,325 @@
+[
+    { "keys": ["ctrl+delete"], "command": "clever_delete", "args": { "type": "piece", "direction": "forward"}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false}]},
+    { "keys": ["ctrl+backspace"], "command": "clever_delete", "args": { "type": "piece", "direction": "backward"}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false}]},
+    { "keys": ["ctrl+right"], "command": "clever_move", "args": { "type": "piece", "direction": "forward"}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false}]},
+    { "keys": ["ctrl+left"], "command": "clever_move", "args": { "type": "piece", "direction": "backward"}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false}]},
+    { "keys": ["shift+ctrl+right"], "command": "clever_select", "args": { "type": "piece", "direction": "forward"}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false}]},
+    { "keys": ["shift+ctrl+left"], "command": "clever_select", "args": { "type": "piece", "direction": "backward"}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false}]},
+
+    { "keys": ["ctrl+x"], "command": "clever_cut", "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false}]},
+    { "keys": ["super+v"], "command": "clever_paste", "args": {}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false} ] },
+    { "keys": ["ctrl+v"], "command": "clever_paste", "args": {}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false } ] },
+    { "keys": ["super+alt+v"], "command": "clever_paste", "args": {}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false } ] },
+
+    { "keys": ["shift+up"], "command": "clever_select", "args": {"type": "line", "direction": "up"},
+        "context":
+        [
+            { "key": "CleverSelect", "operand": "line"}
+        ]
+    },
+    { "keys": ["shift+down"], "command": "clever_select", "args": {"type": "line", "direction": "down"},
+        "context":
+        [
+            { "key": "CleverSelect", "operand": "line"}
+        ]
+    },
+
+    { "keys": ["shift+pageup"], "command": "clever_select", "args": {"type": "paragraph", "direction": "up"},
+        "context":
+        [
+            { "key": "CleverSelect", "operand": "paragraph" }
+        ]
+    },
+    { "keys": ["shift+pagedown"], "command": "clever_select", "args": {"type": "paragraph", "direction": "down"},
+        "context":
+        [
+            { "key": "CleverSelect", "operand": "paragraph" }
+        ]
+    },
+
+
+    { "keys": ["alt+g"], "command": "clever_snippet", "args": { "type": "if"} },
+    { "keys": ["alt+i"], "command": "clever_snippet", "args": { "type": "if_single_line"} },
+    { "keys": ["alt+l"], "command": "clever_snippet", "args": { "type": "elseif"} },
+    { "keys": ["alt+e"], "command": "clever_snippet", "args": { "type": "else"} },
+    { "keys": ["alt+f"], "command": "clever_snippet", "args": { "type": "for"} },
+    { "keys": ["alt+d"], "command": "clever_snippet", "args": { "type": "def"} },
+    { "keys": ["alt+w"], "command": "clever_snippet", "args": { "type": "while"} },
+    { "keys": ["alt+c"], "command": "clever_snippet", "args": { "type": "class"} },
+    { "keys": ["alt+y"], "command": "clever_snippet", "args": { "type": "try"} },
+    { "keys": ["alt+b"], "command": "clever_snippet", "args": { "type": "brace"} },
+    { "keys": ["alt+m"], "command": "clever_snippet", "args": { "type": "comment"} },
+
+
+    // Auto-pair brackets
+    { "keys": ["("], "command": "insert_snippet", "args": {"contents": "($0)"}, "context":
+        [
+            { "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+            { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+            { "key": "following_text", "operator": "regex_contains", "operand": "^(?:\t| |\\)|]|;|\\}|:|,)", "match_all": true }
+        ]
+    },
+    { "keys": ["["], "command": "insert_snippet", "args": {"contents": "[$0]"}, "context":
+        [
+            { "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+            { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+            { "key": "following_text", "operator": "regex_contains", "operand": "^(?:\t| |\\)|]|;|\\}|:|,)", "match_all": true }
+        ]
+    },
+    { "keys": ["{"], "command": "insert_snippet", "args": {"contents": "{$0}"}, "context":
+        [
+            { "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+            { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+            { "key": "following_text", "operator": "regex_contains", "operand": "^(?:\t| |\\)|]|;|\\}|:|,)", "match_all": true }
+        ]
+    },
+    { "keys": ["'"], "command": "insert_snippet", "args": {"contents": "'$0'"}, "context":
+        [
+            { "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+            { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+            // { "key": "following_text", "operator": "regex_contains", "operand": "^(?:\t| |\\)|]|\\}|>|$|:)", "match_all": true },
+            // { "key": "preceding_text", "operator": "not_regex_contains", "operand": "['a-zA-Z0-9_]$", "match_all": true },
+            { "key": "selector", "operator": "not_equal", "operand": "string", "match_all": true },
+            { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true },
+            { "key": "selector", "operator": "not_equal", "operand": "text", "match_all": true }
+        ]
+    },
+
+
+
+
+
+
+
+
+    // { "keys": [","], "command": "insert_snippet", "args": {"contents": ", $0"}, "context":
+    //     [
+    //         { "key": "following_text", "operator": "regex_contains", "operand": "^[\\w'\"]", "match_all": true },
+    //         // { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true },
+    //         { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true },
+    //     ]
+    // },
+
+    // { "keys": [":"], "command": "insert_snippet", "args": {"contents": ": $0"}, "context":
+    //     [
+    //         { "key": "following_text", "operator": "regex_contains", "operand": "^[^\\]]", "match_all": true },
+    //         { "key": "selector", "operator": "not_equal", "operand": "source.matlab", "match_all": true },
+    //         { "key": "selector", "operator": "not_equal", "operand": "string", "match_all": true },
+    //         { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true },
+    //     ]
+    // },
+
+
+
+    // { "keys": ["#"], "command": "insert_snippet", "args": {"contents": " #$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand":
+    //     ".$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["$"], "command": "insert_snippet", "args": {"contents": " \\$$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand":
+    //     "[a-zA-Z0-9_\\'\"})\\]]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["_"], "command": "insert_snippet", "args": {"contents": " _$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand":
+    //     "[-;=+*/%&|,\\'\":]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+
+
+    // { "keys": ["a"], "command": "insert_snippet", "args": {"contents": " a$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|~,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+
+
+    // { "keys": ["a"], "command": "insert_snippet", "args": {"contents": " a$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["b"], "command": "insert_snippet", "args": {"contents": " b$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["c"], "command": "insert_snippet", "args": {"contents": " c$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["d"], "command": "insert_snippet", "args": {"contents": " d$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["e"], "command": "insert_snippet", "args": {"contents": " e$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["f"], "command": "insert_snippet", "args": {"contents": " f$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["g"], "command": "insert_snippet", "args": {"contents": " g$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["h"], "command": "insert_snippet", "args": {"contents": " h$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["i"], "command": "insert_snippet", "args": {"contents": " i$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["j"], "command": "insert_snippet", "args": {"contents": " j$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["k"], "command": "insert_snippet", "args": {"contents": " k$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["l"], "command": "insert_snippet", "args": {"contents": " l$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["m"], "command": "insert_snippet", "args": {"contents": " m$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["n"], "command": "insert_snippet", "args": {"contents": " n$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["o"], "command": "insert_snippet", "args": {"contents": " o$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["p"], "command": "insert_snippet", "args": {"contents": " p$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["q"], "command": "insert_snippet", "args": {"contents": " q$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["r"], "command": "insert_snippet", "args": {"contents": " r$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["s"], "command": "insert_snippet", "args": {"contents": " s$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["t"], "command": "insert_snippet", "args": {"contents": " t$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["u"], "command": "insert_snippet", "args": {"contents": " u$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["v"], "command": "insert_snippet", "args": {"contents": " v$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["w"], "command": "insert_snippet", "args": {"contents": " w$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["x"], "command": "insert_snippet", "args": {"contents": " x$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["y"], "command": "insert_snippet", "args": {"contents": " y$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["x"], "command": "insert_snippet", "args": {"contents": " x$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["z"], "command": "insert_snippet", "args": {"contents": " z$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+
+    // { "keys": ["A"], "command": "insert_snippet", "args": {"contents": " A$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["B"], "command": "insert_snippet", "args": {"contents": " B$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["C"], "command": "insert_snippet", "args": {"contents": " C$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["D"], "command": "insert_snippet", "args": {"contents": " D$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["E"], "command": "insert_snippet", "args": {"contents": " E$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["F"], "command": "insert_snippet", "args": {"contents": " F$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["G"], "command": "insert_snippet", "args": {"contents": " G$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["H"], "command": "insert_snippet", "args": {"contents": " H$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["I"], "command": "insert_snippet", "args": {"contents": " I$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["J"], "command": "insert_snippet", "args": {"contents": " J$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["K"], "command": "insert_snippet", "args": {"contents": " K$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["L"], "command": "insert_snippet", "args": {"contents": " L$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["M"], "command": "insert_snippet", "args": {"contents": " M$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["N"], "command": "insert_snippet", "args": {"contents": " N$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["O"], "command": "insert_snippet", "args": {"contents": " O$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["P"], "command": "insert_snippet", "args": {"contents": " P$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["Q"], "command": "insert_snippet", "args": {"contents": " Q$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["R"], "command": "insert_snippet", "args": {"contents": " R$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["S"], "command": "insert_snippet", "args": {"contents": " S$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["T"], "command": "insert_snippet", "args": {"contents": " T$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["U"], "command": "insert_snippet", "args": {"contents": " U$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["V"], "command": "insert_snippet", "args": {"contents": " V$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["W"], "command": "insert_snippet", "args": {"contents": " W$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["X"], "command": "insert_snippet", "args": {"contents": " X$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["Y"], "command": "insert_snippet", "args": {"contents": " Y$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["X"], "command": "insert_snippet", "args": {"contents": " X$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["Z"], "command": "insert_snippet", "args": {"contents": " Z$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+
+    // { "keys": ["0"], "command": "insert_snippet", "args": {"contents": " 0$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["1"], "command": "insert_snippet", "args": {"contents": " 1$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["2"], "command": "insert_snippet", "args": {"contents": " 2$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["3"], "command": "insert_snippet", "args": {"contents": " 3$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["4"], "command": "insert_snippet", "args": {"contents": " 4$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["5"], "command": "insert_snippet", "args": {"contents": " 5$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["6"], "command": "insert_snippet", "args": {"contents": " 6$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["7"], "command": "insert_snippet", "args": {"contents": " 7$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["8"], "command": "insert_snippet", "args": {"contents": " 8$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+    // { "keys": ["9"], "command": "insert_snippet", "args": {"contents": " 9$0"}, "context": [{ "key": "preceding_text", "operator": "regex_contains", "operand": "[-;=+*/%&|,\\'\":)\\]}#]$", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true }, { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true }] },
+
+
+
+
+    // { "keys": ["a"], "command": "insert_snippet", "args": {"contents": "a$0 "}, "context":
+    //     [
+    //         { "key": "following_text", "operator": "regex_contains", "operand": "^[a-zA-Z0-9_]", "match_all": true },
+    //         { "key": "selector", "operator": "not_equal", "operand": "string.quoted", "match_all": true },
+    //         { "key": "selector", "operator": "not_equal", "operand": "comment", "match_all": true },
+    //     ]
+    // },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    { "keys": ["super+;"], "command": "insert", "args": {"characters": ";"} },
+
+    // "keys": ["<character>"]
+
+
+    { "keys": ["ctrl+'"], "command": "clever_insert", "args": { "key": "'${0:$SELECTION}'"} },
+    { "keys": ["shift+ctrl+'"], "command": "clever_insert", "args": { "key": "\"${0:$SELECTION}\""} },
+    { "keys": ["shift+ctrl+9"], "command": "clever_insert", "args": { "key": "(${0:$SELECTION})"} },
+    { "keys": ["ctrl+["], "command": "clever_insert", "args": { "key": "[${0:$SELECTION}]"} },
+    { "keys": ["shift+ctrl+["], "command": "clever_insert", "args": { "key": "{${0:$SELECTION}}"} },
+    { "keys": ["shift+ctrl+,"], "command": "clever_insert", "args": { "key": "<${0:$SELECTION}>"} },
+
+    { "keys": ["super+shift+;"], "command": "clever_insert_keyword" },
+    { "keys": ["super+ctrl+;"], "command": "clever_insert_function" },
+    { "keys": [" "], "command": "clever_insert", "args": { "key": " "}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": " " }] },
+    { "keys": [";"], "command": "clever_insert", "args": { "key": ";"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": ";" }] },
+    { "keys": ["="], "command": "clever_insert", "args": { "key": "="}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "=" }] },
+    { "keys": ["!"], "command": "clever_insert", "args": { "key": "!"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "!" }] },
+    { "keys": ["?"], "command": "clever_insert", "args": { "key": "?"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "?" }] },
+    { "keys": ["+"], "command": "clever_insert", "args": { "key": "+"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "+" }] },
+    { "keys": ["-"], "command": "clever_insert", "args": { "key": "-"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "-" }] },
+    { "keys": ["*"], "command": "clever_insert", "args": { "key": "*"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "*" }]},
+    { "keys": ["/"], "command": "clever_insert", "args": { "key": "/"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "/" }] },
+    { "keys": ["^"], "command": "clever_insert", "args": { "key": "^"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "^" }] },
+    { "keys": ["%"], "command": "clever_insert", "args": { "key": "%"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "%" }] },
+    { "keys": ["&"], "command": "clever_insert", "args": { "key": "&"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "&" }] },
+    { "keys": ["|"], "command": "clever_insert", "args": { "key": "|"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "|" }] },
+    { "keys": ["<"], "command": "clever_insert", "args": { "key": "<"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "<" }] },
+    { "keys": [">"], "command": "clever_insert", "args": { "key": ">"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": ">" }] },
+    { "keys": ["@"], "command": "clever_insert", "args": { "key": "@"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "@" }] },
+    { "keys": ["~"], "command": "clever_insert", "args": { "key": "~"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "~" }] },
+    { "keys": [","], "command": "clever_insert", "args": { "key": ","}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "," }] },
+    { "keys": ["_"], "command": "clever_insert", "args": { "key": "_"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "_" }] },
+    { "keys": ["."], "command": "clever_insert", "args": { "key": "."}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "." }] },
+    { "keys": [":"], "command": "clever_insert", "args": { "key": ":"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": ":" }] },
+    { "keys": ["#"], "command": "clever_insert", "args": { "key": "#"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "#" }] },
+    { "keys": ["$"], "command": "clever_insert", "args": { "key": "$"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "$" }] },
+
+    { "keys": ["a"], "command": "clever_insert", "args": { "key": "a"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "a" }] },
+    { "keys": ["b"], "command": "clever_insert", "args": { "key": "b"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "b" }] },
+    { "keys": ["c"], "command": "clever_insert", "args": { "key": "c"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "c" }] },
+    { "keys": ["d"], "command": "clever_insert", "args": { "key": "d"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "d" }] },
+    { "keys": ["e"], "command": "clever_insert", "args": { "key": "e"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "e" }] },
+    { "keys": ["f"], "command": "clever_insert", "args": { "key": "f"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "f" }] },
+    { "keys": ["g"], "command": "clever_insert", "args": { "key": "g"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "g" }] },
+    { "keys": ["h"], "command": "clever_insert", "args": { "key": "h"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "h" }] },
+    { "keys": ["i"], "command": "clever_insert", "args": { "key": "i"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "i" }] },
+    { "keys": ["j"], "command": "clever_insert", "args": { "key": "j"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "j" }] },
+    { "keys": ["k"], "command": "clever_insert", "args": { "key": "k"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "k" }] },
+    { "keys": ["l"], "command": "clever_insert", "args": { "key": "l"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "l" }] },
+    { "keys": ["m"], "command": "clever_insert", "args": { "key": "m"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "m" }] },
+    { "keys": ["n"], "command": "clever_insert", "args": { "key": "n"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "n" }] },
+    { "keys": ["o"], "command": "clever_insert", "args": { "key": "o"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "o" }] },
+    { "keys": ["p"], "command": "clever_insert", "args": { "key": "p"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "p" }] },
+    { "keys": ["q"], "command": "clever_insert", "args": { "key": "q"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "q" }] },
+    { "keys": ["r"], "command": "clever_insert", "args": { "key": "r"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "r" }] },
+    { "keys": ["s"], "command": "clever_insert", "args": { "key": "s"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "s" }] },
+    { "keys": ["t"], "command": "clever_insert", "args": { "key": "t"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "t" }] },
+    { "keys": ["u"], "command": "clever_insert", "args": { "key": "u"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "u" }] },
+    { "keys": ["v"], "command": "clever_insert", "args": { "key": "v"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "v" }] },
+    { "keys": ["w"], "command": "clever_insert", "args": { "key": "w"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "w" }] },
+    { "keys": ["x"], "command": "clever_insert", "args": { "key": "x"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "x" }] },
+    { "keys": ["y"], "command": "clever_insert", "args": { "key": "y"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "y" }] },
+    { "keys": ["z"], "command": "clever_insert", "args": { "key": "z"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "z" }] },
+
+    { "keys": ["A"], "command": "clever_insert", "args": { "key": "A"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "A" }] },
+    { "keys": ["B"], "command": "clever_insert", "args": { "key": "B"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "B" }] },
+    { "keys": ["C"], "command": "clever_insert", "args": { "key": "C"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "C" }] },
+    { "keys": ["D"], "command": "clever_insert", "args": { "key": "D"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "D" }] },
+    { "keys": ["E"], "command": "clever_insert", "args": { "key": "E"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "E" }] },
+    { "keys": ["F"], "command": "clever_insert", "args": { "key": "F"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "F" }] },
+    { "keys": ["G"], "command": "clever_insert", "args": { "key": "G"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "G" }] },
+    { "keys": ["H"], "command": "clever_insert", "args": { "key": "H"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "H" }] },
+    { "keys": ["I"], "command": "clever_insert", "args": { "key": "I"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "I" }] },
+    { "keys": ["J"], "command": "clever_insert", "args": { "key": "J"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "J" }] },
+    { "keys": ["K"], "command": "clever_insert", "args": { "key": "K"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "K" }] },
+    { "keys": ["L"], "command": "clever_insert", "args": { "key": "L"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "L" }] },
+    { "keys": ["M"], "command": "clever_insert", "args": { "key": "M"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "M" }] },
+    { "keys": ["N"], "command": "clever_insert", "args": { "key": "N"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "N" }] },
+    { "keys": ["O"], "command": "clever_insert", "args": { "key": "O"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "O" }] },
+    { "keys": ["P"], "command": "clever_insert", "args": { "key": "P"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "P" }] },
+    { "keys": ["Q"], "command": "clever_insert", "args": { "key": "Q"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "Q" }] },
+    { "keys": ["R"], "command": "clever_insert", "args": { "key": "R"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "R" }] },
+    { "keys": ["S"], "command": "clever_insert", "args": { "key": "S"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "S" }] },
+    { "keys": ["T"], "command": "clever_insert", "args": { "key": "T"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "T" }] },
+    { "keys": ["U"], "command": "clever_insert", "args": { "key": "U"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "U" }] },
+    { "keys": ["V"], "command": "clever_insert", "args": { "key": "V"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "V" }] },
+    { "keys": ["W"], "command": "clever_insert", "args": { "key": "W"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "W" }] },
+    { "keys": ["X"], "command": "clever_insert", "args": { "key": "X"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "X" }] },
+    { "keys": ["Y"], "command": "clever_insert", "args": { "key": "Y"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "Y" }] },
+    { "keys": ["Z"], "command": "clever_insert", "args": { "key": "Z"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "Z" }] },
+
+    { "keys": ["0"], "command": "clever_insert", "args": { "key": "0"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "0" }] },
+    { "keys": ["1"], "command": "clever_insert", "args": { "key": "1"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "1" }] },
+    { "keys": ["2"], "command": "clever_insert", "args": { "key": "2"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "2" }] },
+    { "keys": ["3"], "command": "clever_insert", "args": { "key": "3"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "3" }] },
+    { "keys": ["4"], "command": "clever_insert", "args": { "key": "4"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "4" }] },
+    { "keys": ["5"], "command": "clever_insert", "args": { "key": "5"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "5" }] },
+    { "keys": ["6"], "command": "clever_insert", "args": { "key": "6"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "6" }] },
+    { "keys": ["7"], "command": "clever_insert", "args": { "key": "7"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "7" }] },
+    { "keys": ["8"], "command": "clever_insert", "args": { "key": "8"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "8" }] },
+    { "keys": ["9"], "command": "clever_insert", "args": { "key": "9"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "9" }] },
+
+
+]
