@@ -395,6 +395,12 @@ CleverInsertKeys = {
 	],
 	'digit' : [
 		{
+			# No space around = in keyword args
+			'syntax': 'python',
+			'scope': 'meta.function-call',
+			'space_left': r'([;+*/%&^|,\'":)\]}#<>]|[\w\'"})\]][ \t]*-)$',
+		},
+		{
 			'syntax': 'python',
 			'space_left': r'([;=+*/%&^|,\'":)\]}#<>]|[\w\'"})\]][ \t]*-)$',
 			'connect_right': r'[0-9:)\]}]',
@@ -482,7 +488,7 @@ def GetDataForKey(view, pos, keyForLookup, current_syntax):
 			score = 0
 
 			if 'scope' in data:
-				print(view.scope_name(pos))
+				# print(view.scope_name(pos))
 				match = view.match_selector(pos, data['scope'])
 				match = match or view.match_selector(pos - 1, data['scope'])
 				if not match: return -1
