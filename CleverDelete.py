@@ -46,7 +46,7 @@ def clean_up_right(view, begin, end):
 		end = skip_over(view, r'[ \t]*,', end, True)
 
 	# (\s where ( is any char that doesn't like whitespace to it's right
-	if re.search(r'([\s(\[{<])$', text_before):
+	if re.search(r'([ \t(\[{<])$', text_before):
 		end = skip_over(view, r'[ \t]*', end, True)
 
 	# (::  where ( is any char that doesn't like a :: and :: is any connector
@@ -66,8 +66,8 @@ def clean_up_left(view, begin, end):
 		begin = skip_over(view, r'(\.|::|->)[ \t]*', begin, False)
 
 	# ,)  where ) is any char that doesn't like a ,
-	if re.search(r'^[ \t]*[,)}\]>:?=]', text_after):
-		begin = skip_over(view, r',[ \t]*', begin, False)
+	if re.search(r'^[ \t\s]*[,)}\]>:?=]', text_after):
+		begin = skip_over(view, r',[\s]*', begin, False)
 
 	# \s) where ) is any char that doesn't like whitespace to it's left
 	if not is_whitespace(text_before) and re.search(r'^(;?$|[\s)}\]>,])', text_after):
