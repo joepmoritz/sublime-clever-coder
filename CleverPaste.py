@@ -333,7 +333,7 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 						line = view.substr(view.line(region.begin()))
 						if is_whitespace(line): # cursor on empty line
 							(indent, in_len, _) = self.find_indent_near(region.begin(), True, paste_content)
-							if is_sel_at_start:
+							if is_sel_at_start and in_len > 0:
 								paste_content = self.indent_text(paste_content, indent)
 								region = view.line(region)
 								if not re.match(self.connect_below, view.substr(view.line(region.end() + 1))):
