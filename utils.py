@@ -158,12 +158,13 @@ def is_line_comment(view, point):
 
 
 def skip_over(view, pattern, pos, forward):
-	pattern = '^' + pattern if forward else pattern + '$'
 	text_after = get_text_after(view, pos, forward)
-	m = re.search(pattern, text_after)
+	if not forward: text_after = text_after[::-1]
+
+	m = re.match(pattern, text_after)
 	if not m: return pos
 	if forward: return pos + m.end(0)
-	return pos - m.end(0) + m.start(0)
+	return pos - m.end(0)
 
 
 def find_operator_end(view, pos, forward):
