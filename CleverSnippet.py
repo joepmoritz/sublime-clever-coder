@@ -260,7 +260,7 @@ class CleverSnippetCommand(sublime_plugin.TextCommand):
 			################################################################
 			# indent text
 			if is_text_whitespace:
-				(indent, in_len, _) = cpc.find_indent_near(region.begin(), True, '')
+				(indent, in_len, _) = cpc.find_indent_near(region.begin(), True, text_before)
 				# print("indent: %d" % length_of_indentation(indent, self.tab_size))
 			else:
 				(indent, in_len) = min_indentation_of_lines(view, text, self.tab_size)

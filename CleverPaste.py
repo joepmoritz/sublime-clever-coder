@@ -4,6 +4,11 @@ from .utils import *
 from .CleverInsert import *
 
 class CleverPasteCommand(sublime_plugin.TextCommand):
+	def __init__(self, view):
+		super().__init__(view)
+		self.view = view
+		self.current_syntax = get_current_syntax(view)
+
 
 	# add indent if previous line matches this
 	extra_indents_before = {
@@ -88,7 +93,7 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 	force_indent = {
 		'python':
 		{
-			r'^\s*def\s': 1,
+			r'^\s*def\s': 'smallest',
 			r'^\s*class\s': 0,
 		}
 	}
@@ -151,11 +156,15 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 		tab_size = int(self.view.settings().get('tab_size', 4))
 
 		tabs = [tabs for syntax, fis in iter(self.force_indent.items()) if re.match(syntax, self.current_syntax) is not None for fi, tabs in iter(fis.items()) if re.match(fi, paste_content)]
-		if tabs:
-			return ('\t' * tabs[0], tabs[0] * tab_size, '')
+		if tabs: tabs = tabs[0]
+		if isinstance(tabs, int):
+			return ('\t' * tabs, tabs * tab_size, '')
 
 		if self.current_syntax == 'python':
-			(indent, in_len, rest) = self.find_indent_nearest(point, include_current_line)
+			if tabs == 'smallest':
+				(indent, in_len, rest) = self.find_biggest_indent_near(point, include_current_line, smallest=True)
+			else:
+				(indent, in_len, rest) = self.find_indent_nearest(point, include_current_line)
 		else:
 			(indent, in_len, rest) = self.find_biggest_indent_near(point, include_current_line)
 
@@ -204,24 +213,31 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 		return any(re.match(ei, text) for syntax, eis in iter(extra_indents.items()) if re.match(syntax, self.current_syntax) is not None for ei in eis)
 
 
-	def find_biggest_indent_near(self, point, include_current_line=False):
+	def find_biggest_indent_near(self, point, include_current_line=False, smallest=False):
 		tab_size = int(self.view.settings().get('tab_size', 4))
 		(row,col) = self.view.rowcol(point)
 		point_above = self.view.text_point(row, 0)
 		(indent_before, lenb, rest_before) = self.find_indentation_before(point_above)
 		(indent_after, lena, rest_after) = self.find_indentation_after(point_above)
 
-		forced_a = False;
-		forced_b = False;
+		forced_a = False
+		forced_b = False
 		if self.matches_extra_indent(self.extra_indents_before, rest_before):
 			(indent_before, lenb, rest_before) = (indent_before +  '\t', lenb +  tab_size, rest_before)
 			forced_b = True
+			# print("Forced before due to %s" % rest_before)
 		if self.matches_extra_indent(self.extra_indents_after, rest_after):
 			(indent_after, lena, rest_after) = (indent_after +  '\t', lena +  tab_size, rest_after)
 			forced_a = True
+			# print("Forced after due to %s" % rest_after)
 
 		if self.matches_extra_indent(self.less_indents_before, rest_before):
 			(indent_after, lena, rest_after) = ('\t' * int((lenb - tab_size) / tab_size), lenb - tab_size, rest_before)
+			# print("Extra indents less due to %s" % rest_before)
+
+		if smallest:
+			if lena <= lenb: return (indent_after, lena, rest_after)
+			else: return (indent_before, lenb, rest_before)
 
 		if lena > lenb and (forced_a or not forced_b) or (forced_a and not forced_b):
 			(indent, in_len, rest) = (indent_after, lena, rest_after)
