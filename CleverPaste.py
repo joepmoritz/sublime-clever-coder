@@ -1,6 +1,7 @@
 import sublime, sublime_plugin
 import re
 from .utils import *
+from .CleverInsert import *
 
 class CleverPasteCommand(sublime_plugin.TextCommand):
 
@@ -147,19 +148,18 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 
 
 	def find_indent_near(self, point, include_current_line, paste_content):
-		current_syntax = get_current_syntax(self.view)
 		tab_size = int(self.view.settings().get('tab_size', 4))
 
-		tabs = [tabs for syntax, fis in iter(self.force_indent.items()) if re.match(syntax, current_syntax) is not None for fi, tabs in iter(fis.items()) if re.match(fi, paste_content)]
+		tabs = [tabs for syntax, fis in iter(self.force_indent.items()) if re.match(syntax, self.current_syntax) is not None for fi, tabs in iter(fis.items()) if re.match(fi, paste_content)]
 		if tabs:
 			return ('\t' * tabs[0], tabs[0] * tab_size, '')
 
-		if current_syntax == 'python':
+		if self.current_syntax == 'python':
 			(indent, in_len, rest) = self.find_indent_nearest(point, include_current_line)
 		else:
 			(indent, in_len, rest) = self.find_biggest_indent_near(point, include_current_line)
 
-		less_indent = any(re.match(fi, paste_content) for syntax, fis in iter(self.less_indents_for.items()) if re.match(syntax, current_syntax) is not None for fi in fis)
+		less_indent = any(re.match(fi, paste_content) for syntax, fis in iter(self.less_indents_for.items()) if re.match(syntax, self.current_syntax) is not None for fi in fis)
 		if less_indent:
 			return ('\t' * int((in_len - tab_size) / tab_size), in_len - tab_size, rest)
 
@@ -201,8 +201,7 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 
 
 	def matches_extra_indent(self, extra_indents, text):
-		current_syntax = get_current_syntax(self.view)
-		return any(re.match(ei, text) for syntax, eis in iter(extra_indents.items()) if re.match(syntax, current_syntax) is not None for ei in eis)
+		return any(re.match(ei, text) for syntax, eis in iter(extra_indents.items()) if re.match(syntax, self.current_syntax) is not None for ei in eis)
 
 
 	def find_biggest_indent_near(self, point, include_current_line=False):
@@ -244,6 +243,29 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 		if not region.empty():
 			self.view.erase(edit, region)
 
+		if '\n' not in text:
+			text_before = get_text_after(self.view, region.begin(), False)
+			text_after = get_text_after(self.view, region.end(), True)
+			char_before, space_before = split_text_before(text_before)
+			char_after, space_after = split_text_after(text_after)
+
+			# print("text_before:--%s--  text_after:--%s--" % (text_before, text_after))
+			# print("space_before:--%s-- char_before:--%s--" % (space_before, char_before))
+			# print("space_after:--%s-- char_after:--%s--" % (space_after, char_after))
+
+			text = text.strip()
+			char_before_text, space_before_text = split_text_before(text[:-1])
+			char_after_text, space_after_text = split_text_after(text[1:])
+
+			keyData = GetDataForKey(self.view, region.begin(), GetKeyForLookup(text[0]), self.current_syntax)
+			if keyData and not space_before and ShouldHaveSpaceBefore(keyData, char_before, char_after_text, region.begin()):
+				text = ' ' + text
+
+			keyData = GetDataForKey(self.view, region.end(), GetKeyForLookup(text[-1]), self.current_syntax)
+			if keyData and not space_after and ShouldHaveSpaceAfter(keyData, char_before_text, char_after):
+				text = text + ' '
+
+
 		count = self.view.insert(edit, region.begin(), text)
 
 		if selectResult:
@@ -266,8 +288,8 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 		if pc_has_newlines:
 			paste_content = paste_content.rstrip() + "\n"
 
-		current_syntax = get_current_syntax(view)
-		selectResult = current_syntax == "python" and pc_is_multiline
+		self.current_syntax = get_current_syntax(view)
+		selectResult = self.current_syntax == "python" and pc_is_multiline
 		tab_size = int(view.settings().get('tab_size', 4))
 
 		# Make a copy of the regions in the current selection

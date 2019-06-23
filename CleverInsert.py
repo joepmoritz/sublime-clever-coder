@@ -37,38 +37,44 @@ CleverInsertKeys = {
 			'at_end': False,
 		},
 	],
-	"'${0:$SELECTION}'" : [
+	"'" : [
 		{
+			'snippet': "'${0:$SELECTION}'",
 			'space_left': r'[;=+*/%&|,:)\]}#<>\w\.]$',
 			'space_right': r'^[=+*/%&|(\[{#<>\w\.]',
 		},
 	],
-	'"${0:$SELECTION}"' : [
+	'"' : [
 		{
+			'snippet': '"${0:$SELECTION}"',
 			'space_left': r'[;=+*/%&|,:)\]}#<>\w\.]$',
 			'space_right': r'^[=+*/%&|(\[{#<>\w\.]',
 		},
 	],
-	'(${0:$SELECTION})' : [
+	'(' : [
 		{
+			'snippet': '(${0:$SELECTION})',
 			'space_left': r'[;=+\-*/%&|,:#<>]$',
 			'space_right': r'^[=+\-*/%&|#<>\w]',
 		},
 	],
-	'{${0:$SELECTION}}' : [
+	'{' : [
 		{
+			'snippet': '{${0:$SELECTION}}',
 			'space_left': r'[;=+\-*/%&|,:)\]}#<>]$',
 			'space_right': r'^[=+\-*/%&|#<>\w]',
 		},
 	],
-	'[${0:$SELECTION}]' : [
+	'[' : [
 		{
+			'snippet': '[${0:$SELECTION}]',
 			'space_left': r'[;=+\-*/%&|,:#<>]$',
 			'space_right': r'^[=+\-*/%&|#<>\w]',
 		},
 	],
-	'<${0:$SELECTION}>' : [
+	'<' : [
 		{
+			'snippet': '<${0:$SELECTION}>',
 			'space_left': r'[;=+\-*/%&|,:#<>]$',
 			'space_right': r'^[=+\-*/%&|#<>\w\.]',
 		},
@@ -482,8 +488,11 @@ def GetKeyForLookup(key):
 		if re.match('^[0-9]$', key): keyForLookup = 'digit'
 	return keyForLookup
 
+
 def GetDataForKey(view, pos, keyForLookup, current_syntax):
 	# print("syntax:--%s--" % (current_syntax))
+	if keyForLookup not in CleverInsertKeys: return None
+
 	data = CleverInsertKeys[keyForLookup]
 	if isinstance(data, list):
 		def data_score(data):
@@ -546,28 +555,14 @@ def ShouldConnectBefore(keyData, char_before, char_after):
 		('connect_left_after' not in keyData or re.match(keyData['connect_left_after'], char_after))
 
 
-def SplitTextBefore(text_before):
-	m = re.search(r'(.*?)([ \t]*)$', text_before)
-	char_before = m.group(1)
-	space_before = m.group(2)
-	return (char_before, space_before)
-
-
-def SplitTextAfter(text_after):
-	m = re.search(r'^([ \t]*)(.*)', text_after)
-	space_after = m.group(1)
-	char_after = m.group(2)
-	return (char_after, space_after)
-
-
 def InsertString(key, keyData, view, edit, sel):
 	global JustInsertedSpace, LastInserted, LastInsertedPoint
 
 	# grab text around us
 	text_before = get_text_after(view, sel.begin(), False)
 	text_after = get_text_after(view, sel.end(), True)
-	char_before, space_before = SplitTextBefore(text_before)
-	char_after, space_after = SplitTextAfter(text_after)
+	char_before, space_before = split_text_before(text_before)
+	char_after, space_after = split_text_after(text_after)
 
 
 	# print("text_before:--%s--  text_after:--%s--" % (text_before, text_after))
@@ -588,11 +583,7 @@ def InsertString(key, keyData, view, edit, sel):
 	# print('adding: %s' % key)
 
 	# check right pattern
-	add_space_after = ShouldHaveSpaceAfter(keyData, char_before, char_after) and space_after != ' '
-	if add_space_after and space_after and char_after:
-		point = view.find_by_class(sel.end(), True, sublime.CLASS_WORD_START | sublime.CLASS_PUNCTUATION_START)
-		view.replace(edit, sublime.Region(sel.end(), point), ' ')
-		add_space_after = False
+	add_space_after = ShouldHaveSpaceAfter(keyData, char_before, char_after) and not space_after
 
 	if ShouldConnectAfter(keyData, char_before, char_after) and space_after:
 		point = view.find_by_class(sel.end(), True, sublime.CLASS_WORD_START | sublime.CLASS_PUNCTUATION_START)
@@ -600,15 +591,9 @@ def InsertString(key, keyData, view, edit, sel):
 
 
 	# now check our left pattern
-	add_key = True
-	add_space_before = ShouldHaveSpaceBefore(keyData, char_before, char_after, sel.end()) and space_before != ' '
-	if add_space_before and space_before and char_before:
-		point = view.find_by_class(sel.begin(), False, sublime.CLASS_WORD_END | sublime.CLASS_PUNCTUATION_END)
-		view.replace(edit, sublime.Region(point, sel.begin()), ' ' + key)
-		add_space_before = False
-		add_key = False
+	add_space_before = ShouldHaveSpaceBefore(keyData, char_before, char_after, sel.end()) and not space_before
 	
-	if ShouldConnectBefore(keyData, char_before, char_after):
+	if ShouldConnectBefore(keyData, char_before, char_after) and space_before:
 		point = view.find_by_class(sel.begin(), False, sublime.CLASS_WORD_END | sublime.CLASS_PUNCTUATION_END)
 		view.replace(edit, sublime.Region(point, sel.begin()), '')
 
@@ -617,9 +602,7 @@ def InsertString(key, keyData, view, edit, sel):
 	if key == '$':
 		key = r'\$';
 
-	t = ''
-	if add_key:
-		t = key + t
+	t = keyData.get('snippet', key)
 	if add_space_before: t = ' ' + t
 	if add_space_after: t += ' '
 	if '$0' not in t and '${' not in t:
@@ -719,13 +702,14 @@ class CleverInsertCommand(sublime_plugin.TextCommand):
 
 		for region in self.view.sel():
 			current_syntax = get_current_syntax(view, region.end())
-			keyData = GetDataForKey(self.view, region.begin(), keyForLookup, current_syntax)
 	
 			if keyForLookup == ';':
 				keyfunc = InsertSemicolon
 			elif keyForLookup == ' ':
 				keyfunc = InsertSpace
 			else:
+				keyData = GetDataForKey(self.view, region.begin(), keyForLookup, current_syntax)
+				if not keyData: return
 				keyfunc = partial(InsertString, key, keyData)
 
 
@@ -768,8 +752,8 @@ class CleverInsertListener(sublime_plugin.EventListener):
 		# grab text around us
 		text_before = get_text_after(view, sel.begin(), False)
 		text_after = get_text_after(view, sel.end(), True)
-		char_before, space_before = SplitTextBefore(text_before)
-		char_after, space_after = SplitTextAfter(text_after)
+		char_before, space_before = split_text_before(text_before)
+		char_after, space_after = split_text_after(text_after)
 
 		# print("text_before:--%s--" % text_before)
 		# print("space_before:--%s-- char_before:--%s--" % (space_before, char_before))
@@ -786,21 +770,17 @@ class CleverInsertListener(sublime_plugin.EventListener):
 
 		# print('LastInsertedPoint: %d' % LastInsertedPoint)
 		# print('sel.end: %d' % sel.end())
-		# now check our left pattern
-		do_space_after_keyword = LastInserted == 'keyword' and LastInsertedPoint == sel.end() and not keyData.get('no_space_keyword', False)
-		if ('space_left' in keyData and re.search(keyData['space_left'], char_before) or do_space_after_keyword) and space_before != ' ' and ('space_left_after' not in keyData or not re.match(keyData['space_left_after'], char_after)):
+
+		if ShouldHaveSpaceAfter(keyData, char_before, char_after) and not space_after:
 			return True
 
-		if 'connect_left' in keyData and re.search(keyData['connect_left'], char_before) and space_before and ('connect_left_after' not in keyData or not re.match(keyData['connect_left_after'], char_after)):
+		if ShouldConnectAfter(keyData, char_before, char_after) and space_after:
 			return True
 
-
-		# print("space_after:--%s-- char_after:--%s--" % (space_after, char_after))
-
-		if 'space_right' in keyData and re.match(keyData['space_right'],char_after) and space_after != ' ' and ('space_right_before' not in keyData or not re.search(keyData['space_right_before'], char_before)):
+		if ShouldHaveSpaceBefore(keyData, char_before, char_after, sel.end()) and not space_before:
 			return True
 
-		if 'connect_right' in keyData and re.match(keyData['connect_right'], char_after) and space_after and ('connect_right_before' not in keyData or not re.search(keyData['connect_right_before'], char_before)):
+		if ShouldConnectBefore(keyData, char_before, char_after) and space_before:
 			return True
 
 		JustInsertedSpace = False
@@ -845,6 +825,7 @@ class CleverInsertListener(sublime_plugin.EventListener):
 
 				keyForLookup = GetKeyForLookup(key)
 				keyData = GetDataForKey(view, region.begin(), keyForLookup, current_syntax)
+				if not keyData: return False
 
 				point = region.end()
 				scope_name = view.scope_name(point)

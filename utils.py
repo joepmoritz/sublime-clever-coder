@@ -142,6 +142,19 @@ def move_pos(view, pos, amount, forward):
 def get_text_after(view, pos, forward):
 	return view.substr(sublime.Region(pos, move_pos(view, pos, 200, forward)))
 
+def split_text_before(text_before):
+	m = re.search(r'(.*?)(\s*)$', text_before)
+	char_before = m.group(1)
+	space_before = m.group(2)
+	return (char_before, space_before)
+
+
+def split_text_after(text_after):
+	m = re.search(r'^(\s*)(.*)', text_after)
+	space_after = m.group(1)
+	char_after = m.group(2)
+	return (char_after, space_after)
+
 def get_character_after(view, pos, forward):
 	return view.substr(pos if forward else pos - 1)
 

@@ -220,18 +220,19 @@
 
     { "keys": ["super+;"], "command": "insert", "args": {"characters": ";"} },
 
-    // "keys": ["<character>"]
+    // { "keys": ["<character>"], "command": "clever_insert", "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "<character>" }] },
 
 
-    { "keys": ["ctrl+'"], "command": "clever_insert", "args": { "key": "'${0:$SELECTION}'"} },
-    { "keys": ["shift+ctrl+'"], "command": "clever_insert", "args": { "key": "\"${0:$SELECTION}\""} },
-    { "keys": ["shift+ctrl+9"], "command": "clever_insert", "args": { "key": "(${0:$SELECTION})"} },
-    { "keys": ["ctrl+["], "command": "clever_insert", "args": { "key": "[${0:$SELECTION}]"} },
-    { "keys": ["shift+ctrl+["], "command": "clever_insert", "args": { "key": "{${0:$SELECTION}}"} },
-    { "keys": ["shift+ctrl+,"], "command": "clever_insert", "args": { "key": "<${0:$SELECTION}>"} },
+    { "keys": ["'"], "command": "clever_insert", "args": { "key": "'"} },
+    { "keys": ["\""], "command": "clever_insert", "args": { "key": "\""} },
+    { "keys": ["("], "command": "clever_insert", "args": { "key": "("} },
+    { "keys": ["["], "command": "clever_insert", "args": { "key": "["} },
+    { "keys": ["{"], "command": "clever_insert", "args": { "key": "{"} },
+    { "keys": ["<"], "command": "clever_insert", "args": { "key": "<"} },
 
     { "keys": ["super+shift+;"], "command": "clever_insert_keyword" },
     { "keys": ["super+ctrl+;"], "command": "clever_insert_function" },
+
     { "keys": [" "], "command": "clever_insert", "args": { "key": " "}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": " " }] },
     { "keys": [";"], "command": "clever_insert", "args": { "key": ";"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": ";" }] },
     { "keys": ["="], "command": "clever_insert", "args": { "key": "="}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "=" }] },
