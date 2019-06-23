@@ -399,6 +399,7 @@ CleverInsertKeys = {
 			'syntax': 'python',
 			'scope': 'meta.function-call',
 			'space_left': r'([;+*/%&^|,\'":)\]}#<>]|[\w\'"})\]][ \t]*-)$',
+			'connect_right': r'[0-9:)\]}]',
 		},
 		{
 			'syntax': 'python',
@@ -411,7 +412,7 @@ CleverInsertKeys = {
 			'connect_right': r'[:)\]}]', # don't connect numbers in matlab
 		},
 		{
-			'syntax': ['xml', 'css'],
+			'syntax': ['xml', 'shell', 'shell.bash', 'html.basic'],
 			'space_left': r'[;=+*/%&|,\'":)\]}<>]$', # not after #
 			'connect_right': r'[0-9:)\]}]',
 		},
