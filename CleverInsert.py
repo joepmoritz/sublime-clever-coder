@@ -89,7 +89,7 @@ CleverInsertKeys = {
 		},
 		{
 			'syntax': 'python',
-			'scope': 'meta.function-call.arguments',
+			'scope': ['meta.function-call.arguments', 'meta.function.parameters'],
 			'connect_right': r'^=',
 			'connect_left': r'[-=+*/%&|~]$'
 		},
@@ -353,7 +353,7 @@ CleverInsertKeys = {
 		{
 			# No space around = in keyword args
 			'syntax': 'python',
-			'scope': 'meta.function-call',
+			'scope': ['meta.function-call', 'meta.function.parameters'],
 			'space_left': r'([;+*/%&^|,\'":)\]}#<>]|[\w\'"})\]][ \t]*-)$',
 			'connect_right': r'^[:)]',
 		},
@@ -500,8 +500,9 @@ def GetDataForKey(view, pos, keyForLookup, current_syntax):
 
 			if 'scope' in data:
 				# print(view.scope_name(pos))
-				match = view.match_selector(pos, data['scope'])
-				match = match or view.match_selector(pos - 1, data['scope'])
+				if isinstance(data['scope'], list):
+					match = any(view.match_selector(pos, scope) for scope in data['scope'])
+				# match = match or view.match_selector(pos - 1, data['scope'])
 				if not match: return -1
 
 			if 'syntax' in data:
