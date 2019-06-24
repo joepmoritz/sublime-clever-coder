@@ -245,9 +245,9 @@ class CleverSnippetCommand(sublime_plugin.TextCommand):
 			is_text_whitespace = is_whitespace(text)
 
 			# if cursor on a code line, add new line after and set selection to that new line
-			if is_sel_empty and not is_text_whitespace:
-				view.insert(edit, region.end(), "\n")
-				region = sublime.Region(region.end(), region.end() + 1)
+			if is_sel_empty:
+				view.insert(edit, region.begin(), "\n")
+				region = sublime.Region(region.begin(), region.begin() + 1)
 				text = "\n"
 				is_text_whitespace = True
 				is_sel_empty = True
