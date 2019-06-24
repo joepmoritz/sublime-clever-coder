@@ -9,6 +9,7 @@ from pprint import pprint as pp
 # This means we need more text before available
 
 CleverInsertIgnoreSyntaxes = ['plain', 'dosbatch', 'yaml', 'git.commit', 'html.markdown']
+CleverInsertIgnoreScopes = ['punctuation.definition.string.begin', 'string', 'comment']
 
 JustInsertedSpace = False
 LastInserted = ''
@@ -745,6 +746,20 @@ class CleverInsertCommand(sublime_plugin.TextCommand):
 
 
 
+def supported(view, pos, keyData):
+	if keyData is None:
+		return False
+
+	current_syntax = get_current_syntax(view, pos)
+	if current_syntax in CleverInsertIgnoreSyntaxes:
+		return False
+
+	if any(view.score_selector(pos, scope) for scope in CleverInsertIgnoreScopes):
+		return False
+
+	scope_name = view.scope_name(pos)
+	if 'ignore_scope' in keyData and any(igs in scope_name for igs in keyData['ignore_scope']):
+		return False
 
 
 class CleverInsertListener(sublime_plugin.EventListener):
@@ -822,19 +837,20 @@ class CleverInsertListener(sublime_plugin.EventListener):
 				# if not is_sel_empty:
 				# 	return False
 
+				# scope_name = view.scope_name(point)
+				# print("scope_name: %s" % scope_name)
+
 				current_syntax = get_current_syntax(view, region.end())
-				if current_syntax in CleverInsertIgnoreSyntaxes:
-					return False
 
 				keyForLookup = GetKeyForLookup(key)
 				keyData = GetDataForKey(view, region.begin(), keyForLookup, current_syntax)
 				if not keyData: return False
 
-				point = region.end()
-				scope_name = view.scope_name(point)
-				if 'ignore_scope' in keyData and any(igs in scope_name for igs in keyData['ignore_scope']):
+				if not supported(view, region.begin(), keyData):
 					return False
 
+
+				# Check key specific context
 				if keyForLookup == ';':
 					keyfunc = self.contextForSemi
 				elif keyForLookup == ' ':
@@ -842,21 +858,6 @@ class CleverInsertListener(sublime_plugin.EventListener):
 				else:
 					keyfunc = partial(self.contextForSpaceAround, key, keyData)
 
-
-
-
-				# scope_name = view.scope_name(point)
-				# print("scope_name: %s" % scope_name)
-
-				# Not if cursor is in a literal string
-				if view.score_selector(point, 'string') and not view.score_selector(point, 'punctuation.definition.string.begin'):
-					return False
-
-				# Not if cursor is in comment
-				if view.score_selector(point, 'comment'):
-					return False
-
-				# Check key specific context
 				if not keyfunc(region, view):
 					return False
 

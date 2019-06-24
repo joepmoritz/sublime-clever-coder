@@ -1,7 +1,7 @@
 import sublime, sublime_plugin
 import re
 from .utils import *
-from .CleverInsert import *
+from . import CleverInsert
 
 class CleverPasteCommand(sublime_plugin.TextCommand):
 	def __init__(self, view):
@@ -249,6 +249,36 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 	def is_single_line(self, text):
 		return '\n' not in text[:-1] and text[-1] == '\n'
 
+
+	def add_space_around(self, text, region):
+		"""Prepares a piece of text for insertion at given region. Helper for other addons at this time."""
+
+		text_before = get_text_after(self.view, region.begin(), False)
+		text_after = get_text_after(self.view, region.end(), True)
+		char_before, space_before = split_text_before(text_before)
+		char_after, space_after = split_text_after(text_after)
+
+		# print("text_before:--%s--  text_after:--%s--" % (text_before, text_after))
+		# print("space_before:--%s-- char_before:--%s--" % (space_before, char_before))
+		# print("space_after:--%s-- char_after:--%s--" % (space_after, char_after))
+
+		text = text.strip()
+		char_before_text, space_before_text = split_text_before(text[:-1])
+		char_after_text, space_after_text = split_text_after(text[1:])
+
+		keyData = GetDataForKey(self.view, region.begin(), GetKeyForLookup(text[0]), self.current_syntax)
+		if CleverInsert.supported(self.view, region.begin(), keyData) and \
+			not space_before and ShouldHaveSpaceBefore(keyData, char_before, char_after_text, region.begin()):
+			text = ' ' + text
+
+		keyData = GetDataForKey(self.view, region.end(), GetKeyForLookup(text[-1]), self.current_syntax)
+		if CleverInsert.supported(self.view, region.end(), keyData) and \
+			not space_after and ShouldHaveSpaceAfter(keyData, char_before_text, char_after):
+			text = text + ' '
+
+		return text
+
+
 	def insertTextAtRegion(self, edit, region, text, selectResult):
 		is_single_line = self.is_single_line(text)
 		if selectResult or is_single_line:
@@ -258,30 +288,12 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 
 		if not region.empty():
 			self.view.erase(edit, region)
+			region.a = region.b = region.begin()
 
+		# Use correct spacing around paste content
 		if '\n' not in text:
-			text_before = get_text_after(self.view, region.begin(), False)
-			text_after = get_text_after(self.view, region.end(), True)
-			char_before, space_before = split_text_before(text_before)
-			char_after, space_after = split_text_after(text_after)
-
-			# print("text_before:--%s--  text_after:--%s--" % (text_before, text_after))
-			# print("space_before:--%s-- char_before:--%s--" % (space_before, char_before))
-			# print("space_after:--%s-- char_after:--%s--" % (space_after, char_after))
-
-			text = text.strip()
-			char_before_text, space_before_text = split_text_before(text[:-1])
-			char_after_text, space_after_text = split_text_after(text[1:])
-
-			keyData = GetDataForKey(self.view, region.begin(), GetKeyForLookup(text[0]), self.current_syntax)
-			if keyData and not space_before and ShouldHaveSpaceBefore(keyData, char_before, char_after_text, region.begin()):
-				text = ' ' + text
-
-			keyData = GetDataForKey(self.view, region.end(), GetKeyForLookup(text[-1]), self.current_syntax)
-			if keyData and not space_after and ShouldHaveSpaceAfter(keyData, char_before_text, char_after):
-				text = text + ' '
-
-
+			text = self.add_space_around(text, region)
+			
 		count = self.view.insert(edit, region.begin(), text)
 
 		if selectResult:
