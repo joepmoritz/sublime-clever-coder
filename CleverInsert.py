@@ -502,7 +502,9 @@ def GetDataForKey(view, pos, keyForLookup, current_syntax):
 				# print(view.scope_name(pos))
 				if isinstance(data['scope'], list):
 					match = any(view.match_selector(pos, scope) for scope in data['scope'])
-				# match = match or view.match_selector(pos - 1, data['scope'])
+				else:
+					match = view.match_selector(pos, data['scope'])
+					# match = match or view.match_selector(pos - 1, data['scope'])
 				if not match: return -1
 
 			if 'syntax' in data:
