@@ -8,7 +8,14 @@ from pprint import pprint as pp
 # TODO: fix C++ templates <> by checking text before for the word template
 # This means we need more text before available
 
-CleverInsertIgnoreSyntaxes = ['plain', 'dosbatch', 'yaml', 'git.commit', 'html.markdown']
+CleverInsertIgnoreSyntaxes = [
+	'plain',
+	'dosbatch',
+	'yaml',
+	'git.commit',
+	'html.markdown',
+	'git.ignore'
+]
 CleverInsertIgnoreScopes = ['punctuation.definition.string.begin', 'string', 'comment']
 
 JustInsertedSpace = False
@@ -405,7 +412,7 @@ CleverInsertKeys = {
 		{
 			# No space around = in keyword args
 			'syntax': 'python',
-			'scope': 'meta.function-call',
+			'scope': ['meta.function-call', 'meta.function.parameters'],
 			'space_left': r'([;+*/%&^|,\'":)\]}#<>]|[\w\'"})\]][ \t]*-)$',
 			'connect_right': r'[0-9:)\]}]',
 		},
