@@ -266,12 +266,14 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 		char_before_text, space_before_text = split_text_before(text[:-1])
 		char_after_text, space_after_text = split_text_after(text[1:])
 
-		keyData = GetDataForKey(self.view, region.begin(), GetKeyForLookup(text[0]), self.current_syntax)
+		keyForLookup = CleverInsert.GetKeyForLookup(text[0])
+		keyData = CleverInsert.GetDataForKey(self.view, region.begin(), keyForLookup, self.current_syntax)
 		if CleverInsert.supported(self.view, region.begin(), keyData) and \
 			not space_before and ShouldHaveSpaceBefore(keyData, char_before, char_after_text, region.begin()):
 			text = ' ' + text
 
-		keyData = GetDataForKey(self.view, region.end(), GetKeyForLookup(text[-1]), self.current_syntax)
+		keyForLookup = CleverInsert.GetKeyForLookup(text[-1])
+		keyData = CleverInsert.GetDataForKey(self.view, region.end(), keyForLookup, self.current_syntax)
 		if CleverInsert.supported(self.view, region.end(), keyData) and \
 			not space_after and ShouldHaveSpaceAfter(keyData, char_before_text, char_after):
 			text = text + ' '

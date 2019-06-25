@@ -768,6 +768,8 @@ def supported(view, pos, keyData):
 	if 'ignore_scope' in keyData and any(igs in scope_name for igs in keyData['ignore_scope']):
 		return False
 
+	return True
+
 
 class CleverInsertListener(sublime_plugin.EventListener):
 
