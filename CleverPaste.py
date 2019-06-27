@@ -1,7 +1,7 @@
 import sublime, sublime_plugin
 import re
 from .utils import *
-from . import CleverInsert
+from . import CleverInsert as ci
 
 class CleverPasteCommand(sublime_plugin.TextCommand):
 	def __init__(self, view):
@@ -266,16 +266,16 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 		char_before_text, space_before_text = split_text_before(text[:-1])
 		char_after_text, space_after_text = split_text_after(text[1:])
 
-		keyForLookup = CleverInsert.GetKeyForLookup(text[0])
-		keyData = CleverInsert.GetDataForKey(self.view, region.begin(), keyForLookup, self.current_syntax)
-		if CleverInsert.supported(self.view, region.begin(), keyData) and \
-			not space_before and ShouldHaveSpaceBefore(keyData, char_before, char_after_text, region.begin()):
+		keyForLookup = ci.GetKeyForLookup(text[0])
+		keyData = ci.GetDataForKey(self.view, region.begin(), keyForLookup, self.current_syntax)
+		if ci.supported(self.view, region.begin(), keyData) and \
+			not space_before and ci.ShouldHaveSpaceBefore(keyData, char_before, char_after_text, region.begin()):
 			text = ' ' + text
 
-		keyForLookup = CleverInsert.GetKeyForLookup(text[-1])
-		keyData = CleverInsert.GetDataForKey(self.view, region.end(), keyForLookup, self.current_syntax)
-		if CleverInsert.supported(self.view, region.end(), keyData) and \
-			not space_after and ShouldHaveSpaceAfter(keyData, char_before_text, char_after):
+		keyForLookup = ci.GetKeyForLookup(text[-1])
+		keyData = ci.GetDataForKey(self.view, region.end(), keyForLookup, self.current_syntax)
+		if ci.supported(self.view, region.end(), keyData) and \
+			not space_after and ci.ShouldHaveSpaceAfter(keyData, char_before_text, char_after):
 			text = text + ' '
 
 		return text
