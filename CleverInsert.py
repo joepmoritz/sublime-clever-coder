@@ -138,6 +138,12 @@ CleverInsertKeys = {
 	'+' :
 	[
 		{
+			'scope': ['meta.item-access'],
+			'space_left': r'[\'"};]$',
+			'space_right': r'^[\'"{]',
+			'connect_right': r'^[=+]',
+		},
+		{
 			'space_left': r'[\w\'"})\];]$',
 			'space_right': r'^[\w\'"{(\[]',
 			'connect_right': r'^[=+]',
@@ -160,6 +166,12 @@ CleverInsertKeys = {
 			'syntax': ['tex.latex'],
 			'space_left': r'[+*/=\'"})\],]$', # not \w
 			'space_right': r'^[\'"{(\[]',
+			'connect_right': r'^[-]',
+		},
+		{
+			'scope': ['meta.item-access'],
+			'space_left': r'[+*/=\'"},]$',
+			'space_right': r'^[\'"{]',
 			'connect_right': r'^[-]',
 		},
 		{
@@ -417,11 +429,6 @@ CleverInsertKeys = {
 			'connect_right': r'[0-9:)\]}]',
 		},
 		{
-			'syntax': 'python',
-			'space_left': r'([;=+*/%&^|,\'":)\]}#<>]|[\w\'"})\]][ \t]*-)$',
-			'connect_right': r'[0-9:)\]}]',
-		},
-		{
 			'syntax': 'matlab',
 			'space_left': r'([;=+*/%&^|,\'")\]}#<>]|[\w\'"})\]][ \t]*-)$',
 			'connect_right': r'[:)\]}]', # don't connect numbers in matlab
@@ -432,11 +439,6 @@ CleverInsertKeys = {
 			'connect_right': r'[0-9:)\]}]',
 		},
 		{
-			'syntax': ['c', 'c++'],
-			'space_left': r'([;=+*/%&^|,\'")\]}#<>]|[\w\'"})\]][ \t]*-)$',
-			'connect_right': r'[0-9:)\]}]',
-		},
-		{
 			'syntax': ['tex.latex'],
 			'space_left': r'[;=+!?`,\A-Za-z\'":})\]]$',
 			'connect_left': r'[{(\[.]$',
@@ -444,7 +446,12 @@ CleverInsertKeys = {
 			'ignore_scope': LatexIgnoreScopes,
 		},
 		{
-			'space_left': r'([;=+*/%&^|,\'")\]}#<>]|[\w\'"})\]][ \t]*-)$',
+			'scope': ['meta.item-access'],
+			'space_left': r'([;=&^|,\'")\]}#<>])$',
+			'connect_right': r'[0-9:)\]}]',
+		},
+		{
+			'space_left': r'([;=+*/%&^|,\'":)\]}#<>]|[\w\'"})\]][ \t]*-)$',
 			'connect_right': r'[0-9:)\]}]',
 		},
 	],
