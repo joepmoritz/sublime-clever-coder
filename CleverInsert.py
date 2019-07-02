@@ -426,7 +426,14 @@ CleverInsertKeys = {
 			'syntax': 'python',
 			'scope': ['meta.function-call', 'meta.function.parameters'],
 			'space_left': r'([;+*/%&^|,\'":)\]}#<>]|[\w\'"})\]][ \t]*-)$',
-			'connect_right': r'[0-9:)\]}]',
+			'connect_right': r'[0-9:\]}]',
+		},
+		{
+			# No space after : inside []
+			'syntax': 'python',
+			'scope': ['meta.item-access'],
+			'space_left': r'([;=+*/%&^|,\'")\]}#<>]|[\w\'"})\]][ \t]*-)$',
+			'connect_right': r'[0-9:]',
 		},
 		{
 			'syntax': 'matlab',
@@ -557,16 +564,18 @@ def ShouldHaveSpaceBefore(keyData, char_before, char_after, pos):
 		LastInserted == 'keyword' and pos == LastInsertedPoint and not keyData.get('no_space_keyword', False)
 
 
-def ShouldConnectAfter(keyData, char_before, char_after):
+def ShouldConnectAfter(keyData, char_before, char_after, space_after):
 	return \
+		space_after and '\n' not in space_after and \
 		'connect_right' in keyData and \
 		re.match(keyData['connect_right'], char_after) and \
 		char_after and \
 		('connect_right_before' not in keyData or re.search(keyData['connect_right_before'], char_before))
 
 
-def ShouldConnectBefore(keyData, char_before, char_after):
+def ShouldConnectBefore(keyData, char_before, char_after, space_before):
 	return \
+		space_before and '\n' not in space_before and \
 		'connect_left' in keyData and \
 		re.search(keyData['connect_left'], char_before) and \
 		char_before and \
@@ -603,7 +612,7 @@ def InsertString(key, keyData, view, edit, sel):
 	# check right pattern
 	add_space_after = ShouldHaveSpaceAfter(keyData, char_before, char_after) and not space_after
 
-	if ShouldConnectAfter(keyData, char_before, char_after) and space_after:
+	if ShouldConnectAfter(keyData, char_before, char_after, space_after):
 		point = view.find_by_class(sel.end(), True, sublime.CLASS_WORD_START | sublime.CLASS_PUNCTUATION_START)
 		view.replace(edit, sublime.Region(sel.end(), point), '')
 
@@ -611,7 +620,7 @@ def InsertString(key, keyData, view, edit, sel):
 	# now check our left pattern
 	add_space_before = ShouldHaveSpaceBefore(keyData, char_before, char_after, sel.end()) and not space_before
 	
-	if ShouldConnectBefore(keyData, char_before, char_after) and space_before:
+	if ShouldConnectBefore(keyData, char_before, char_after, space_before):
 		point = view.find_by_class(sel.begin(), False, sublime.CLASS_WORD_END | sublime.CLASS_PUNCTUATION_END)
 		view.replace(edit, sublime.Region(point, sel.begin()), '')
 
@@ -808,13 +817,13 @@ class CleverInsertListener(sublime_plugin.EventListener):
 		if ShouldHaveSpaceAfter(keyData, char_before, char_after) and not space_after:
 			return True
 
-		if ShouldConnectAfter(keyData, char_before, char_after) and space_after:
+		if ShouldConnectAfter(keyData, char_before, char_after, space_after):
 			return True
 
 		if ShouldHaveSpaceBefore(keyData, char_before, char_after, sel.end()) and not space_before:
 			return True
 
-		if ShouldConnectBefore(keyData, char_before, char_after) and space_before:
+		if ShouldConnectBefore(keyData, char_before, char_after, space_before):
 			return True
 
 		JustInsertedSpace = False
