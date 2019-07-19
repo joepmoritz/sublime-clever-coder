@@ -17,7 +17,7 @@ CleverInsertIgnoreSyntaxes = [
 	'html.markdown',
 	'git.ignore'
 ]
-CleverInsertIgnoreScopes = ['punctuation.definition.string.begin', 'string', 'comment']
+CleverInsertIgnoreScopes = ['comment']
 
 JustInsertedSpace = False
 LastInserted = ''
@@ -47,6 +47,14 @@ CleverInsertKeys = {
 		},
 	],
 	"'" : [
+		{
+			# No space around = in keyword args
+			'syntax': 'python',
+			'scope': ['meta.function-call', 'meta.function.parameters'],
+			'snippet': "'${0:$SELECTION}'",
+			'space_left': r'[;+*/%&|,:)\]}#<>\w\.]$',
+			'space_right': r'^[+*/%&|(\[{#<>\w\.]',
+		},
 		{
 			'snippet': "'${0:$SELECTION}'",
 			'space_left': r'[;=+*/%&|,:)\]}#<>\w\.]$',
@@ -785,6 +793,9 @@ def supported(view, pos, keyData):
 
 	current_syntax = get_current_syntax(view, pos)
 	if current_syntax in CleverInsertIgnoreSyntaxes:
+		return False
+
+	if view.score_selector(pos, 'string') and not view.score_selector(pos, 'punctuation.definition.string.begin'):
 		return False
 
 	if any(view.score_selector(pos, scope) for scope in CleverInsertIgnoreScopes):
