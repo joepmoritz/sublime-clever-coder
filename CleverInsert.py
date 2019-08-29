@@ -12,6 +12,7 @@ CleverInsertIgnoreSyntaxes = [
 	'plain',
 	'dosbatch',
 	'yaml',
+	'shell.bash',
 	'git.commit',
 	'html.markdown',
 	'git.ignore'
@@ -62,7 +63,7 @@ CleverInsertKeys = {
 	'(' : [
 		{
 			'snippet': '(${0:$SELECTION})',
-			'space_left': r'[;=+\-*/%&|,:#<>]$',
+			'space_left': r'[;=+\-*/%&|,:#<]$',
 			'space_right': r'^[=+\-*/%&|#<>\w]',
 		},
 	],
@@ -80,7 +81,7 @@ CleverInsertKeys = {
 			'space_right': r'^[=+\-*/%&|#<>\w]',
 		},
 	],
-	'<' : [
+	'<>' : [
 		{
 			'snippet': '<${0:$SELECTION}>',
 			'space_left': r'[;=+\-*/%&|,:#<>]$',
@@ -397,8 +398,9 @@ CleverInsertKeys = {
 		{
 			'syntax': ['c', 'c++'],
 			# not after # (for #inlude), and not after < for templates, and : vs ::, ->
-			'space_left': r'([;=/%|^,\'")\]}]|[&*\w\'"})\]][ \t]*[*&-]|[^-]>|[^:]:|[^+]\+)$',
-			'connect_right': r'^[:)\]}]',
+			'space_left': r'([;=/%|^,\'")\]{}]|[&*\w\'"})\]][ \t]*[*&-]|[^-]>|[^:]:|[^+]\+)$',
+			'connect_right': r'^[)\]]',
+			'space_right': r'^[}]',
 		},
 		{
 			'syntax': ['tex.latex'],
@@ -456,6 +458,14 @@ CleverInsertKeys = {
 			'scope': ['meta.item-access'],
 			'space_left': r'([;=&^|,\'")\]}#<>])$',
 			'connect_right': r'[0-9:)\]}]',
+		},
+		{
+			'syntax': ['c', 'c++'],
+			# not after # (for #inlude), and not after < for templates, and : vs ::, ->
+			'space_left': r'([;=/%|^,\'")\]{}]|[&*\w\'"})\]][ \t]*[*&-]|[^-]>|[^:]:|[^+]\+)$',
+			'space_left': r'([;=+*/%&^|,\'":)\]}#<>]|[\w\'"})\]][ \t]*-)$',
+			'connect_right': r'^[)\]]',
+			'space_right': r'^[}]',
 		},
 		{
 			'space_left': r'([;=+*/%&^|,\'":)\]}#<>]|[\w\'"})\]][ \t]*-)$',
@@ -631,9 +641,9 @@ def InsertString(key, keyData, view, edit, sel):
 
 	t = keyData.get('snippet', key)
 	if add_space_before: t = ' ' + t
-	if add_space_after: t += ' '
 	if '$0' not in t and '${' not in t:
 		t += '$0'
+	if add_space_after: t += ' '
 	view.run_command('insert_snippet', args={"contents": t});
 
 	if add_space_after:
