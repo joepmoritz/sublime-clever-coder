@@ -143,6 +143,11 @@ class CleverSnippetCommand(sublime_plugin.TextCommand):
 				'syntax': 'js'
 			},
 			{
+				'before': '${1:func}(${2:args}) {',
+				'after': '}\n',
+				'syntax': 'java'
+			},
+			{
 				'before': '${1:func}(${2:args})\n{',
 				'after': '}\n',
 				'syntax': ''
