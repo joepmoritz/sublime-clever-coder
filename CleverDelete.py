@@ -67,10 +67,10 @@ def clean_up_left(view, begin, end):
 
 	# ,)  where ) is any char that doesn't like a ,
 	if re.search(r'^[ \t\s]*[,)}\]>:?=]', text_after):
-		begin = skip_over(view, r',[\s]*', begin, False)
+		begin = skip_over(view, r'\s*,', begin, False)
 
 	# \s) where ) is any char that doesn't like whitespace to it's left
-	if not is_whitespace(text_before) and re.search(r'^(;?$|[\s)}\]>,])', text_after):
+	if re.search(r'^(;?$|[ \t)}\]>,])', text_after):
 		begin = skip_over(view, r'[ \t]*', begin, False)
 
 	return begin
