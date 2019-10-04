@@ -38,20 +38,20 @@ def clean_up_right(view, begin, end):
 	# (.  where ( is any char that doesn't like a . and . is any connector
 	# note: space is valid between . connector in Python, but who does that really?
 	# So I ignore that situation here. That way, keywords followed by . work correctly.
-	if not re.search(r'[\w)}\]]+$', text_before):
+	if not re.search(r'[\w)}\]]+\Z', text_before):
 		end = skip_over(view, r'[ \t]*(\.|->)(?=[^0-9])', end, True)
 
 	# (,  where ( is any char that doesn't like a ,
-	if re.search(r'(^|[,({\[<:?=!])[ \t]*$', text_before):
+	if re.search(r'(^|[,({\[<:?=!])[ \t]*\Z', text_before):
 		end = skip_over(view, r'[ \t]*,', end, True)
 
 	# (\s where ( is any char that doesn't like whitespace to it's right
-	if re.search(r'([ \t(\[{<])$', text_before):
+	if re.search(r'[ \t(\[{<]\Z', text_before):
 		end = skip_over(view, r'[ \t]*', end, True)
 
 	# (::  where ( is any char that doesn't like a :: and :: is any connector
 	# This is mostly for C++, as you can't have ::
-	if not re.search(r'[\w]+$', text_before):
+	if not re.search(r'[\w]+\Z', text_before):
 		end = skip_over(view, r'[ \t]*(::)(?=[^0-9])', end, True)
 
 	return end
