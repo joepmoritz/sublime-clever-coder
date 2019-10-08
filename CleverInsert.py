@@ -74,6 +74,14 @@ CleverInsertKeys = {
 			'space_left': r'[;=+\-*/%&|,:#<]$',
 			'space_right': r'^[=+\-*/%&|#<>\w]',
 		},
+		{
+			# No space around = inside function calls
+			'snippet': '(${0:$SELECTION})',
+			'syntax': 'python',
+			'scope': ['meta.function-call', 'meta.function.parameters'],
+			'space_left': r'[;+\-*/%&|,:#<]$',
+			'space_right': r'^[+\-*/%&|#<>\w]',
+		},
 	],
 	'{' : [
 		{
@@ -83,6 +91,14 @@ CleverInsertKeys = {
 		},
 	],
 	'[' : [
+		{
+			# No space around = inside function calls
+			'snippet': '[${0:$SELECTION}]',
+			'syntax': 'python',
+			'scope': ['meta.function-call', 'meta.function.parameters'],
+			'space_left': r'[;+\-*/%&|,:#<>]$',
+			'space_right': r'^[+\-*/%&|#<>\w]',
+		},
 		{
 			'snippet': '[${0:$SELECTION}]',
 			'space_left': r'[;=+\-*/%&|,:#<>]$',
