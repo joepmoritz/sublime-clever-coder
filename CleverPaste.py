@@ -392,13 +392,13 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 									paste_content += '\n'
 							self.insertTextAtRegion(edit, region, paste_content, selectResult)
 
-						 # line is a single } or ] or end
-						 # A bit broken: insert point should be at start of line
-						 # elif is_sel_at_start and re.match(self.connect_below, view.substr(view.line(region.begin()))):
-							# (indent, in_len, _) = self.find_indent_near(region.begin(), True, paste_content)
-							# paste_content = self.indent_text(paste_content, indent)
-							# paste_content += '\n'
-							# self.insertTextAtRegion(edit, region, paste_content, selectResult)
+						# line is a single } or ] or end
+						elif re.match(self.connect_below, line):
+							line_start = line_begin(view, region.begin())
+							(indent, in_len, _) = self.find_indent_near(line_start, True, paste_content)
+							paste_content = self.indent_text(paste_content, indent)
+							paste_content += '\n'
+							self.insertTextAtRegion(edit, sublime.Region(line_start, line_start), paste_content, selectResult)
 						else:
 							self.insertTextAtRegion(edit, region, paste_content, False)
 

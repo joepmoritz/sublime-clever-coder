@@ -17,7 +17,7 @@ CleverInsertIgnoreSyntaxes = [
 	'html.markdown',
 	'git.ignore'
 ]
-CleverInsertIgnoreScopes = ['comment']
+CleverInsertIgnoreScopes = ['comment', 'meta.string']
 
 JustInsertedSpace = False
 LastInserted = ''

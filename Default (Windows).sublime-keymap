@@ -223,8 +223,8 @@
     // { "keys": ["<character>"], "command": "clever_insert", "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "<character>" }] },
 
 
-    { "keys": ["'"], "command": "clever_insert", "args": { "key": "'"} },
-    { "keys": ["\""], "command": "clever_insert", "args": { "key": "\""} },
+    { "keys": ["'"], "command": "clever_insert", "args": { "key": "'"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "'" }] },
+    { "keys": ["\""], "command": "clever_insert", "args": { "key": "\""}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "\"" }] },
     { "keys": ["("], "command": "clever_insert", "args": { "key": "("} },
     { "keys": ["["], "command": "clever_insert", "args": { "key": "["} },
     { "keys": ["{"], "command": "clever_insert", "args": { "key": "{"} },
