@@ -225,10 +225,10 @@
 
     { "keys": ["'"], "command": "clever_insert", "args": { "key": "'"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "'" }] },
     { "keys": ["\""], "command": "clever_insert", "args": { "key": "\""}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "\"" }] },
-    { "keys": ["("], "command": "clever_insert", "args": { "key": "("} },
-    { "keys": ["["], "command": "clever_insert", "args": { "key": "["} },
-    { "keys": ["{"], "command": "clever_insert", "args": { "key": "{"} },
-    { "keys": ["<"], "command": "clever_insert", "args": { "key": "<"} },
+    { "keys": ["("], "command": "clever_insert", "args": { "key": "("}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "(" }] },
+    { "keys": ["["], "command": "clever_insert", "args": { "key": "["}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "[" }] },
+    { "keys": ["{"], "command": "clever_insert", "args": { "key": "{"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "{" }] },
+    { "keys": ["<"], "command": "clever_insert", "args": { "key": "<"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "<" }] },
 
     { "keys": ["super+shift+;"], "command": "clever_insert_keyword" },
     { "keys": ["super+ctrl+;"], "command": "clever_insert_function" },

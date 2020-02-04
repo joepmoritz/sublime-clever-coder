@@ -202,6 +202,11 @@ class CleverSnippetCommand(sublime_plugin.TextCommand):
 			},
 			{
 				'before': 'try\n{',
+				'after': '}\ncatch (Exception e)\n{\n}\n',
+				'syntax': 'java'
+			},
+			{
+				'before': 'try\n{',
 				'after': '}\ncatch (const std::exception& e)\n{\n}\n',
 				'syntax': ''
 			}

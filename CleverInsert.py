@@ -17,7 +17,7 @@ CleverInsertIgnoreSyntaxes = [
 	'html.markdown',
 	'git.ignore'
 ]
-CleverInsertIgnoreScopes = ['comment', 'meta.string']
+CleverInsertIgnoreScopes = ['comment']
 
 JustInsertedSpace = False
 LastInserted = ''
@@ -70,9 +70,8 @@ CleverInsertKeys = {
 	],
 	'(' : [
 		{
+			'scope': ['string'],
 			'snippet': '(${0:$SELECTION})',
-			'space_left': r'[;=+\-*/%&|,:#<]$',
-			'space_right': r'^[=+\-*/%&|#<>\w]',
 		},
 		{
 			# No space around = inside function calls
@@ -81,6 +80,11 @@ CleverInsertKeys = {
 			'scope': ['meta.function-call', 'meta.function.parameters'],
 			'space_left': r'[;+\-*/%&|,:#<]$',
 			'space_right': r'^[+\-*/%&|#<>\w]',
+		},
+		{
+			'snippet': '(${0:$SELECTION})',
+			'space_left': r'[;=+\-*/%&|,:#<]$',
+			'space_right': r'^[=+\-*/%&|#<>\w]',
 		},
 	],
 	'{' : [
@@ -140,7 +144,7 @@ CleverInsertKeys = {
 			'space_right': r'^[\w]',
 		},
 		{
-			'space_left': r'[\w\'"})\]]$',
+			'space_left': r'[=\w\'"})\]]$',
 			'connect_right': r'^.',
 		},
 	],
@@ -181,6 +185,13 @@ CleverInsertKeys = {
 		},
 	],
 	'-' : [
+		{
+			# No space around = in keyword args
+			'syntax': 'python',
+			'scope': ['meta.function-call', 'meta.function.parameters'],
+			'space_left': r'[+*/\w\'"})\],]$',
+			'connect_right': r'^[-]',
+		},
 		{
 			'syntax': ['xml', 'css', 'html.basic'],
 			'space_left': r'[=\'"})\],]$', # not after \w
@@ -406,6 +417,7 @@ CleverInsertKeys = {
 		{
 			'syntax': 'python',
 			'space_left': r'([;=+*/%&^|,\'":)\]}#<>]|[\w\'"})\]][ \t]*-)$',
+			'space_right': r'[-=+*/%&^|\'"#<>]$',
 			'connect_right': r'^[:)]',
 		},
 		# },
@@ -448,18 +460,18 @@ CleverInsertKeys = {
 	],
 	'digit' : [
 		{
+			# No space after : inside []
+			'syntax': 'python',
+			'scope': ['meta.item-access'],
+			'space_left': r'([;=+*/%&^|\'")\]}#<>]|[\w\'"})\]][ \t]*-)$',
+			'connect_right': r'[0-9:]',
+		},
+		{
 			# No space around = in keyword args
 			'syntax': 'python',
 			'scope': ['meta.function-call', 'meta.function.parameters'],
 			'space_left': r'([;+*/%&^|,\'":)\]}#<>]|[\w\'"})\]][ \t]*-)$',
 			'connect_right': r'[0-9:\]}]',
-		},
-		{
-			# No space after : inside []
-			'syntax': 'python',
-			'scope': ['meta.item-access'],
-			'space_left': r'([;=+*/%&^|,\'")\]}#<>]|[\w\'"})\]][ \t]*-)$',
-			'connect_right': r'[0-9:]',
 		},
 		{
 			'syntax': 'matlab',
@@ -557,10 +569,9 @@ def GetDataForKey(view, pos, keyForLookup, current_syntax):
 			if 'scope' in data:
 				# print(view.scope_name(pos))
 				if isinstance(data['scope'], list):
-					match = any(view.match_selector(pos, scope) for scope in data['scope'])
+					match = any(view.score_selector(pos, scope) and view.score_selector(pos - 1, scope) for scope in data['scope'])
 				else:
-					match = view.match_selector(pos, data['scope'])
-					# match = match or view.match_selector(pos - 1, data['scope'])
+					match = view.score_selector(pos, data['scope']) and view.score_selector(pos - 1, data['scope'])
 				if not match: return -1
 
 			if 'syntax' in data:
@@ -909,6 +920,7 @@ class CleverInsertListener(sublime_plugin.EventListener):
 				if not keyData: return False
 
 				if not supported(view, region.begin(), keyData):
+					# print("Not supported")
 					return False
 
 
