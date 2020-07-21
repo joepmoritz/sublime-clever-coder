@@ -58,7 +58,7 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 		]
 	}
 
-	connect_below = r'^\s*(else|elseif|end|}|]|\))'
+	connect_below = r'^\s*(else|elseif|end|}|\]|\))[\]}),;:\s]*$'
 
 	# add indent if next line matches this
 	extra_indents_after = {
@@ -70,6 +70,7 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 		[
 			r'^\s*else\s*:$',
 			r'^\s*elif\s.*:$',
+			r'^\s*[}>)\]]',
 		],
 	}
 
@@ -237,7 +238,7 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 		if self.matches_extra_indent(self.extra_indents_after, rest_after):
 			(indent_after, lena, rest_after) = (indent_after +  '\t', lena +  tab_size, rest_after)
 			forced_a = True
-			# print("Forced after due to %s" % rest_after)
+			# print("Forced %d after due to %s" % (lena, rest_after))
 
 		if self.matches_extra_indent(self.less_indents_before, rest_before):
 			(indent_after, lena, rest_after) = ('\t' * int((lenb - tab_size) / tab_size), lenb - tab_size, rest_before)
@@ -255,7 +256,7 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 		return (indent, in_len, rest)
 
 	def is_single_line(self, text):
-		return '\n' not in text[:-1] and text[-1] == '\n'
+		return '\n' not in text[:-1] and text.endswith('\n')
 
 
 	def add_space_around(self, text, region):
