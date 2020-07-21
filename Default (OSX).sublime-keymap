@@ -128,9 +128,17 @@
     { "keys": ["shift+ctrl+left"], "command": "clever_select", "args": { "type": "piece", "direction": "backward"}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false}]},
 
     { "keys": ["ctrl+x"], "command": "clever_cut", "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false}]},
-    { "keys": ["super+v"], "command": "clever_paste", "args": {}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false} ] },
-    { "keys": ["ctrl+v"], "command": "clever_paste", "args": {}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false } ] },
-    { "keys": ["super+alt+v"], "command": "clever_paste", "args": {}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false } ] },
+    { "keys": ["shift+delete"], "command": "clever_cut", "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false}]},
+    { "keys": ["super+v"], "command": "clever_paste", "args": {}, "context": [
+        { "key": "panel_has_focus", "operator": "equal", "operand": false },
+        { "key": "selector", "operator": "not_equal", "operand": "text.dired" }
+    ] },
+    { "keys": ["ctrl+v"],  "command": "clever_paste", "args": {}, "context": [
+        { "key": "panel_has_focus", "operator": "equal", "operand": false },
+        { "key": "selector", "operator": "not_equal", "operand": "text.dired" }
+    ] },
+    { "keys": ["shift+insert"],  "command": "clever_paste", "args": {}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false } ] },
+    { "keys": ["ctrl+shift+v"], "command": "paste" },
 
     { "keys": ["shift+up"], "command": "clever_select", "args": {"type": "line", "direction": "up"},
         "context":
