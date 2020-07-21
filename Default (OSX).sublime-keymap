@@ -167,10 +167,10 @@
     },
 
 
-    { "keys": ["alt+g"], "command": "clever_snippet", "args": { "type": "if"} },
-    { "keys": ["alt+i"], "command": "clever_snippet", "args": { "type": "if_single_line"} },
+    { "keys": ["alt+i"], "command": "clever_snippet", "args": { "type": "if"} },
+    { "keys": ["alt+g"], "command": "clever_snippet", "args": { "type": "if_single_line"} },
     { "keys": ["alt+l"], "command": "clever_snippet", "args": { "type": "elseif"} },
-    { "keys": ["alt+e"], "command": "clever_snippet", "args": { "type": "else"} },
+    { "keys": ["alt+s"], "command": "clever_snippet", "args": { "type": "else"} },
     { "keys": ["alt+f"], "command": "clever_snippet", "args": { "type": "for"} },
     { "keys": ["alt+d"], "command": "clever_snippet", "args": { "type": "def"} },
     { "keys": ["alt+w"], "command": "clever_snippet", "args": { "type": "while"} },
@@ -216,7 +216,29 @@
 
 
 
+    { "keys": ["super+;"], "command": "insert", "args": {"characters": ";"} },
 
+    // Smaller than, greather than
+    { "keys": ["super+ctrl+,", "super+ctrl+s"], "command": "clever_insert", "args": { "key": "<s"} },
+    { "keys": ["super+ctrl+.", "super+ctrl+s"], "command": "clever_insert", "args": { "key": ">s"} },
+
+    // Arrow
+    { "keys": ["ctrl+."], "command": "insert_snippet", "args": {"contents": "->"}, "context":
+        [
+            { "key": "selector", "operator": "equal", "operand": "source.c++", "match_all": true },
+        ]
+    },
+    { "keys": ["ctrl+."], "command": "insert_snippet", "args": {"contents": "->"}, "context":
+        [
+            { "key": "selector", "operator": "equal", "operand": "source.c", "match_all": true },
+        ]
+    },
+    // Javascript arrow
+    { "keys": ["ctrl+."], "command": "insert_snippet", "args": {"contents": "=>"}, "context":
+        [
+            { "key": "selector", "operator": "equal", "operand": "source.js", "match_all": true },
+        ]
+    },
 
 
 
