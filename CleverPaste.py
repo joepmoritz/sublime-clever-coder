@@ -290,7 +290,7 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 		return text
 
 
-	def insertTextAtRegion(self, edit, region, text, selectResult):
+	def insertTextAtRegion(self, edit, region, text, selectResult, add_space_around=False):
 		is_single_line = self.is_single_line(text)
 		if selectResult or is_single_line:
 			self.view.sel().clear()
@@ -302,7 +302,7 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 			region.a = region.b = region.begin()
 
 		# Use correct spacing around paste content
-		if '\n' not in text:
+		if add_space_around:
 			text = self.add_space_around(text, region)
 			
 		count = self.view.insert(edit, region.begin(), text)
@@ -389,7 +389,7 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 				else: # paste_content is plain string (no newlines)
 					if not is_sel_empty: # small selection, on same line
 						selectResult = False
-						self.insertTextAtRegion(edit, region, paste_content, selectResult)
+						self.insertTextAtRegion(edit, region, paste_content, selectResult, add_space_around=True)
 					else: # just a cursor
 						line = view.substr(view.line(region.begin()))
 						if is_whitespace(line): # cursor on empty line
@@ -409,6 +409,6 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 							paste_content += '\n'
 							self.insertTextAtRegion(edit, sublime.Region(line_start, line_start), paste_content, selectResult)
 						else:
-							self.insertTextAtRegion(edit, region, paste_content, False)
+							self.insertTextAtRegion(edit, region, paste_content, False, add_space_around=True)
 
 
