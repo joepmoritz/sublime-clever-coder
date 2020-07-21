@@ -26,6 +26,14 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 			r'^\s*def\s.*:$',
 			r'^\s*class\s.*:$',
 		],
+		r'lua':
+		[
+			r'^\s*if\s.*then$',
+			r'^\s*else\s*$',
+			r'^\s*for\s',
+			r'^\s*while\s',
+			r'^\s*function\s',
+		],
 		r'matlab':
 		[
 			r'^\s*for\s.*(?<!end)$',

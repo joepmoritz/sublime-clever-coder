@@ -35,6 +35,11 @@ class CleverSnippetCommand(sublime_plugin.TextCommand):
 				'syntax': 'matlab'
 			},
 			{
+				'before': 'if $1 then',
+				'after': 'end\n',
+				'syntax': 'lua'
+			},
+			{
 				'before': 'if ($1) {',
 				'after': '}\n',
 				'syntax': 'js'
@@ -116,6 +121,11 @@ class CleverSnippetCommand(sublime_plugin.TextCommand):
 				'syntax': 'python'
 			},
 			{
+				'before': 'for ${1:item} do',
+				'after': 'end\n',
+				'syntax': 'lua'
+			},
+			{
 				'before': 'for ${1:item} = ${2:list}',
 				'after': 'end\n',
 				'syntax': 'matlab'
@@ -136,6 +146,11 @@ class CleverSnippetCommand(sublime_plugin.TextCommand):
 				'before': 'function ${1:#FILENAME#}(${2:args})',
 				'after': 'end\n',
 				'syntax': 'matlab'
+			},
+			{
+				'before': 'function ${1:name}(${2:args})',
+				'after': 'end\n',
+				'syntax': 'lua'
 			},
 			{
 				'before': 'function ${1:func}(${2:args}) {',
