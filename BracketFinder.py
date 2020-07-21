@@ -52,9 +52,9 @@ class BracketFinder():
 		# print(right)
 		# print(pos)
 
-		if forward and left and left.begin == pos:
+		if forward and left and left.begin == pos and right:
 			return right.end
-		if not forward and right and right.end == pos:
+		if not forward and right and right.end == pos and left:
 			return left.begin
 
 		return pos
