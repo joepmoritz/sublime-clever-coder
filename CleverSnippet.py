@@ -256,7 +256,8 @@ class CleverSnippetCommand(sublime_plugin.TextCommand):
 			# print("Scope:%s"%scope_name)
 			snippets = self.snippets[type]
 			for snippet in snippets:
-				if snippet['syntax'] in scope_name:
+				syntaxes = snippet['syntax'] if isinstance(snippet['syntax'], list) else [snippet['syntax']]
+				if any(syntax in scope_name for syntax in syntaxes):
 					break
 
 			text_before = snippet['before']
