@@ -45,7 +45,7 @@ class CleverSnippetCommand(sublime_plugin.TextCommand):
 				'syntax': 'js'
 			},
 			{
-				'before': 'if ($1)\n{',
+				'before': 'if ($1) {',
 				'after': '}\n',
 				'syntax': ''
 			}
@@ -78,6 +78,11 @@ class CleverSnippetCommand(sublime_plugin.TextCommand):
 				'before': 'elsif $1 ,end',
 				'after': '',
 				'syntax': 'matlab'
+			},
+			{
+				'before': 'else if ($1)\n{',
+				'after': '}\n',
+				'syntax': 'c++'
 			},
 			{
 				'before': 'else if ($1) {',
@@ -131,7 +136,7 @@ class CleverSnippetCommand(sublime_plugin.TextCommand):
 				'syntax': 'matlab'
 			},
 			{
-				'before': 'for (${1:initial})\n{',
+				'before': 'for (${1:initial}) {',
 				'after': '}\n',
 				'syntax': ''
 			}
@@ -163,7 +168,7 @@ class CleverSnippetCommand(sublime_plugin.TextCommand):
 				'syntax': 'java'
 			},
 			{
-				'before': '${1:func}(${2:args})\n{',
+				'before': '${1:returnType} ${2:func}(${3:args}) {',
 				'after': '}\n',
 				'syntax': ''
 			},
