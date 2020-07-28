@@ -219,15 +219,18 @@ class CleverPasteCommand(sublime_plugin.TextCommand):
 
 
 	def matches_extra_indent(self, extra_indents, text):
-		return any(re.match(ei, text) for syntax, eis in iter(extra_indents.items()) if re.match(syntax, self.current_syntax) is not None for ei in eis)
+		return any(re.match(ei, text) for syntax, eis in extra_indents.items() if re.match(syntax, self.current_syntax) for ei in eis)
 
 
 	def find_biggest_indent_near(self, point, include_current_line=False, smallest=False):
 		tab_size = int(self.view.settings().get('tab_size', 4))
 		(row,col) = self.view.rowcol(point)
 		point_above = self.view.text_point(row, 0)
-		(indent_before, lenb, rest_before) = self.find_indentation_before(point_above)
-		(indent_after, lena, rest_after) = self.find_indentation_after(point_above)
+		(indent_before, lenb, rest_before) = self.find_indentation_before(point_above + 1)
+		(indent_after, lena, rest_after) = self.find_indentation_after(point_above - 1)
+
+		print("rest_before:--%s--" % rest_before)
+		print("rest_after:--%s--" % rest_after)
 
 		forced_a = False
 		forced_b = False

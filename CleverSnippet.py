@@ -185,7 +185,7 @@ class CleverSnippetCommand(sublime_plugin.TextCommand):
 				'syntax': 'matlab'
 			},
 			{
-				'before': 'while (${1:condition})\n{',
+				'before': 'while (${1:condition}) {',
 				'after': '}\n',
 				'syntax': ''
 			}
