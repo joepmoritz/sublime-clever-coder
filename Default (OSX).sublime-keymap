@@ -127,44 +127,17 @@
     { "keys": ["shift+ctrl+right"], "command": "clever_select", "args": { "type": "piece", "direction": "forward"}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false}]},
     { "keys": ["shift+ctrl+left"], "command": "clever_select", "args": { "type": "piece", "direction": "backward"}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false}]},
 
-    { "keys": ["ctrl+x"], "command": "clever_cut", "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false}]},
-    { "keys": ["shift+delete"], "command": "clever_cut", "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false}]},
-    { "keys": ["super+v"], "command": "clever_paste", "args": {}, "context": [
-        { "key": "panel_has_focus", "operator": "equal", "operand": false },
-        { "key": "selector", "operator": "not_equal", "operand": "text.dired" }
-    ] },
-    { "keys": ["ctrl+v"],  "command": "clever_paste", "args": {}, "context": [
-        { "key": "panel_has_focus", "operator": "equal", "operand": false },
-        { "key": "selector", "operator": "not_equal", "operand": "text.dired" }
-    ] },
-    { "keys": ["shift+insert"],  "command": "clever_paste", "args": {}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false } ] },
+    { "keys": ["ctrl+x"], "command": "clever_cut", "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false} { "key": "selector", "operator": "not_equal", "operand": "text.dired" }] },
+    { "keys": ["shift+delete"], "command": "clever_cut", "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false}, { "key": "selector", "operator": "not_equal", "operand": "text.dired" }] },
+    { "keys": ["super+v"], "command": "clever_paste", "args": {}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false }, { "key": "selector", "operator": "not_equal", "operand": "text.dired" }] },
+    { "keys": ["ctrl+v"],  "command": "clever_paste", "args": {}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false }, { "key": "selector", "operator": "not_equal", "operand": "text.dired" }] },
+    { "keys": ["shift+insert"],  "command": "clever_paste", "args": {}, "context": [{ "key": "panel_has_focus", "operator": "equal", "operand": false }, { "key": "selector", "operator": "not_equal", "operand": "text.dired" }] },
     { "keys": ["ctrl+shift+v"], "command": "paste" },
 
-    { "keys": ["shift+up"], "command": "clever_select", "args": {"type": "line", "direction": "up"},
-        "context":
-        [
-            { "key": "CleverSelect", "operand": "line"}
-        ]
-    },
-    { "keys": ["shift+down"], "command": "clever_select", "args": {"type": "line", "direction": "down"},
-        "context":
-        [
-            { "key": "CleverSelect", "operand": "line"}
-        ]
-    },
-
-    { "keys": ["shift+pageup"], "command": "clever_select", "args": {"type": "paragraph", "direction": "up"},
-        "context":
-        [
-            { "key": "CleverSelect", "operand": "paragraph" }
-        ]
-    },
-    { "keys": ["shift+pagedown"], "command": "clever_select", "args": {"type": "paragraph", "direction": "down"},
-        "context":
-        [
-            { "key": "CleverSelect", "operand": "paragraph" }
-        ]
-    },
+    { "keys": ["shift+up"], "command": "clever_select", "args": {"type": "line", "direction": "up"}, "context": [{ "key": "CleverSelect", "operand": "line"}]},
+    { "keys": ["shift+down"], "command": "clever_select", "args": {"type": "line", "direction": "down"}, "context": [{ "key": "CleverSelect", "operand": "line"}]},
+    { "keys": ["shift+pageup"], "command": "clever_select", "args": {"type": "paragraph", "direction": "up"}, "context": [{ "key": "CleverSelect", "operand": "paragraph" }]},
+    { "keys": ["shift+pagedown"], "command": "clever_select", "args": {"type": "paragraph", "direction": "down"}, "context": [{ "key": "CleverSelect", "operand": "paragraph" }]},
 
 
     { "keys": ["alt+i"], "command": "clever_snippet", "args": { "type": "if"} },
@@ -216,11 +189,8 @@
 
 
 
-    { "keys": ["super+;"], "command": "insert", "args": {"characters": ";"} },
+    { "keys": ["ctrl+;"], "command": "insert", "args": {"characters": ";"} },
 
-    // Smaller than, greather than
-    { "keys": ["super+ctrl+,", "super+ctrl+s"], "command": "clever_insert", "args": { "key": "<s"} },
-    { "keys": ["super+ctrl+.", "super+ctrl+s"], "command": "clever_insert", "args": { "key": ">s"} },
 
     // Arrow
     { "keys": ["ctrl+."], "command": "insert_snippet", "args": {"contents": "->"}, "context":
@@ -243,6 +213,10 @@
 
 
     // { "keys": ["<character>"], "command": "clever_insert", "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "<character>" }] },
+
+    // Smaller than, greather than
+    { "keys": ["alt+ctrl+,", "alt+ctrl+s"], "command": "clever_insert", "args": { "key": "<s"} },
+    { "keys": ["alt+ctrl+.", "alt+ctrl+s"], "command": "clever_insert", "args": { "key": ">s"} },
 
 
     { "keys": ["'"], "command": "clever_insert", "args": { "key": "'"}, "context": [{ "key": "CleverInsert", "operator": "equal", "operand": "'" }] },
